@@ -8,6 +8,7 @@ As well as listing all printers under the right mouse button.
 __copyright__ = "Copyright (C) 2013 David Braam - Released under terms of the AGPLv3 License"
 
 import os
+import sys
 
 from Cura.util import profile
 from Cura.util import version
@@ -29,7 +30,10 @@ class PrinterConnectionManager(object):
 		self._groupList.append(doodle3dConnect.doodle3dConnectionGroup())
 
 		for p in pluginInfo.getPluginList('printerconnection'):
-			self._groupList.append(pluginInfo.createPluginInstance(p))
+			try:
+				self._groupList.append(pluginInfo.createPluginInstance(p))
+			except:
+				print "Error instantiating PrinterConnection plugin ({}): {}".format(p.getName(), sys.exc_info()[0])
 
 		#Sort the connections by highest priority first.
 		self._groupList.sort(reverse=True)
