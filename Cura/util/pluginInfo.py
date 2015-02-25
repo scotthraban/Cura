@@ -11,6 +11,7 @@ import platform
 import re
 import tempfile
 import cPickle as pickle
+import importlib
 
 from Cura.util import profile
 from Cura.util import resources
@@ -168,3 +169,10 @@ def runPostProcessingPlugins(engineResult):
 		f.close()
 		os.unlink(tempfilename)
 	return None
+
+def createPluginInstance(pluginInfo, *args):
+	fullFilename = pluginInfo.getFullFilename()
+	modulename = fullFilename[fullFilename.rfind("{0}plugins{0}".format(os.sep))+1:-3].replace(os.sep, '.')
+	createPluginInstanceMethod = getattr(importlib.import_module(modulename), "createPluginInstance")
+	return createPluginInstanceMethod(*args)
+
