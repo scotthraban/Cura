@@ -50,7 +50,13 @@ class printerConnectionBase(object):
 	def getName(self):
 		return self._name
 
-	#Load the data into memory for printing, returns True on success
+	#The next two methods are similar in that they load the
+	#data into memory for printing, and return True on success.
+	#
+	#Only one of the methods should be overriden in the concrete
+	#class - the first if a filename for the gcode is desireable,
+	#the second if no filename is needed. The filename will be
+	#generated from the first file that is loaded onto the platter.
 	def loadGCodeDataForFilename(self, dataStream, filename):
 		return self.loadGCodeData(dataStream)
 
